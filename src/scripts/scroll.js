@@ -22,12 +22,11 @@ let startY = 0;
 const limitY = scrollbarHeight - getElementHeight(scrollLine);
 
 const transformScroll = (e) => {
-  const transform = e.clientY - startY;
-  const translateY = transform > 0 ? transform : startTransform + transform;
+  const transform = startTransform + e.clientY - startY;
 
-  if (translateY >= 0 && translateY <= limitY) {
-    scrollLine.style.transform = `translateY(${translateY}px)`;
-    scrollContent.style.transform = `translateY(${-translateY / ratio}px)`;
+  if (transform >= 0 && transform <= limitY) {
+    scrollLine.style.transform = `translateY(${transform}px)`;
+    scrollContent.style.transform = `translateY(${-transform / ratio}px)`;
   }
 };
 
@@ -85,7 +84,7 @@ scrollContent.addEventListener("wheel", (e) => {
   )[1];
 
   if (e.deltaY > 0) {
-    const delta = currentTransform - scrollContent.scrollHeight / 20;
+    const delta = currentTransform - (scrollContent.scrollHeight / 20) * 0.1;
 
     if (-delta * ratio <= limitY) {
       scrollLine.style.transform = `translateY(${-delta * ratio}px)`;
@@ -97,7 +96,7 @@ scrollContent.addEventListener("wheel", (e) => {
       scrollLine.style.transform = `translateY(${limitY}px)`;
     }
   } else if (e.deltaY < 0) {
-    const delta = currentTransform + scrollContent.scrollHeight / 20;
+    const delta = currentTransform + (scrollContent.scrollHeight / 20) * 0.1;
 
     if (-delta * ratio >= 0) {
       scrollLine.style.transform = `translateY(${-delta * ratio}px)`;

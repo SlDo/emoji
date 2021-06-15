@@ -1428,9 +1428,12 @@ const createEmojiSections = () => {
       emoji.innerHTML = emojiText;
       emoji.addEventListener("click", () => {
         const current = localStorage.getItem("recently");
-        const recentlyEmoji = current == null ? [] : current;
+        const recentlyEmoji = current == null ? [] : [current];
 
-        recentlyEmoji.push(emojiText);
+        if (recentlyEmoji.indexOf(emojiText) !== -1) {
+          recentlyEmoji.push(emojiText);
+        }
+
         localStorage.setItem("recently", recentlyEmoji);
       });
       container.appendChild(emoji);
@@ -1440,7 +1443,6 @@ const createEmojiSections = () => {
 
     content.appendChild(block);
   });
-  console.log(content, sections);
 };
 
 createEmojiSections();

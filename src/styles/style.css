@@ -7,9 +7,12 @@ html {
 .hidden {
   visibility: hidden;
   opacity: 0;
-  /*height: 0;*/
-  /*width: 0;*/
   pointer-events: none;
+}
+
+.empty {
+  height: 0;
+  width: 0;
 }
 
 .icon {
