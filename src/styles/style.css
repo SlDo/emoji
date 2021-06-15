@@ -4,9 +4,27 @@ html {
   font-family: Arial, sans-serif;
 }
 
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  /*height: 0;*/
+  /*width: 0;*/
+  pointer-events: none;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.button-icon {
+  border: none;
+  cursor: pointer;
+}
+
 .chat__container {
   position: relative;
-  width: 438px;
+  width: 290px;
 }
 
 .shape {
@@ -59,16 +77,14 @@ main {
   display: inline-block;
   right: 13px;
   top: 9px;
-  height: 20px;
-  width: 20px;
 }
 
-.emoji-icon {
+.input--icon {
   width: 100%;
   height: 100%;
   transition: fill var(--duration);
 }
 
-.input__icon-button:hover .emoji-icon {
+.input__icon-button:hover .input--icon {
   fill: var(--blue-color);
 }

@@ -1404,6 +1404,12 @@ const sections = [
 ];
 
 const content = document.querySelector("[data-scroll='content']");
+const toggleButton = document.querySelector("[data-action='openEmoji']");
+const stickers = document.querySelector(".stickers");
+
+toggleButton.addEventListener("click", () => {
+  stickers.classList.toggle("hidden");
+});
 
 const createEmojiSections = () => {
   sections.forEach(({ items, title }) => {
@@ -1412,13 +1418,25 @@ const createEmojiSections = () => {
     const blockTitle = document.createElement("h2");
     blockTitle.classList.add("title");
     blockTitle.innerHTML = title;
+    const container = document.createElement("div");
+    container.classList.add("emoji__container");
     block.appendChild(blockTitle);
 
     items.forEach((emojiText) => {
-      const emoji = document.createElement("span");
+      const emoji = document.createElement("div");
+      emoji.classList.add("emoji-icon");
       emoji.innerHTML = emojiText;
-      block.appendChild(emoji);
+      emoji.addEventListener("click", () => {
+        const current = localStorage.getItem("recently");
+        const recentlyEmoji = current == null ? [] : current;
+
+        recentlyEmoji.push(emojiText);
+        localStorage.setItem("recently", recentlyEmoji);
+      });
+      container.appendChild(emoji);
     });
+
+    block.appendChild(container);
 
     content.appendChild(block);
   });
