@@ -1,0 +1,75 @@
+@import './variables.css';
+
+html {
+  font-family: Arial, sans-serif;
+}
+
+.chat__container {
+  position: relative;
+  width: 438px;
+}
+
+.shape {
+  border: 1px solid var(--grey-color);
+  border-radius: var(--radius);
+}
+
+.stickers__container {
+  width: 100%;
+  bottom: calc(100% + 12px);
+}
+
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.input__wrapper {
+  position: relative;
+}
+
+.input {
+  display: block;
+  outline: none;
+  width: 100%;
+  max-height: 200px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--grey-100-color);
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 36px;
+  padding: 9px calc(13px + 20px + 13px) 9px 13px;
+  transition: border-color var(--duration);
+  cursor: text;
+}
+
+.input:focus {
+  border-color: var(--blue-color);
+}
+
+.input__icon-button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  position: absolute;
+  display: inline-block;
+  right: 13px;
+  bottom: 9px;
+  height: 20px;
+  width: 20px;
+}
+
+.emoji-icon {
+  width: 100%;
+  height: 100%;
+  transition: fill var(--duration);
+}
+
+.input__icon-button:hover .emoji-icon {
+  fill: var(--blue-color);
+}

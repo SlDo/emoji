@@ -1,0 +1,25 @@
+.emoji-picker {
+  display: flex;
+  flex-direction: row;
+  max-height: 220px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  box-sizing: border-box;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-right: 5px;
+}
+
+.emoji-picker__content {
+  flex: 1;
+  transition: transform 0.25s cubic-bezier(0.61, 1, 0.88, 1);
+}
+
+.emoji__section {
+  height: 100px;
+}
+
+.emoji__section:nth-child(even) {
+  background: #2787F5;
+}
