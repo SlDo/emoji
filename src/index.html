@@ -10,20 +10,21 @@
   <body>
     <main>
       <div class="chat__container">
-        <div class="emoji-picker stickers__container shape">
-          <div
-            class="emoji-picker__content"
-            data-scroll="content"
-            style="transform: translateY(0)"
-          >
-            <div class="emoji__section"></div>
-            <div class="emoji__section"></div>
-            <div class="emoji__section"></div>
-            <div class="emoji__section"></div>
+        <div class="stickers shape">
+          <div class="emoji-picker stickers__container">
+            <div
+              class="emoji-picker__content"
+              data-scroll="content"
+              style="transform: translateY(0)"
+            ></div>
+            <div class="scrollbar" data-scroll="container">
+              <div
+                class="scrollbar__line"
+                style="transform: translateY(0)"
+              ></div>
+            </div>
           </div>
-          <div class="scrollbar" data-scroll="container">
-            <div class="scrollbar__line" style="transform: translateY(0)"></div>
-          </div>
+          <div class="emoji-panel"></div>
         </div>
         <div class="input__wrapper">
           <div contenteditable="true" class="input shape" id="chatInput"></div>
@@ -49,5 +50,6 @@
       </div>
     </main>
   </body>
+  <script src="scripts/emojiPicker.js"></script>
   <script src="scripts/scroll.js"></script>
 </html>
