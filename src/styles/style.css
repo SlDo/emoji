@@ -10,11 +10,6 @@ html {
   pointer-events: none;
 }
 
-.empty {
-  height: 0;
-  width: 0;
-}
-
 .icon {
   width: 20px;
   height: 20px;
@@ -70,6 +65,14 @@ main {
 
 .input:focus {
   border-color: var(--blue-color);
+}
+
+.input:empty:before {
+  content: attr(data-placeholder);
+}
+
+.input:focus:empty:before {
+  content: attr(data-placeholder);
 }
 
 .input__icon-button {
