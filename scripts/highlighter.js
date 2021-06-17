@@ -3,7 +3,7 @@ const input = document.querySelector('#chatInput');
 const isHighlight = (word) => /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/.test(word) || /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i.test(word) || /^#/.test(word) || /^@/.test(word);
 
 const highlightWords = (e) => {
-  if (e.code === 'Space') {
+  if (e.code === 'Space' || e.keyCode === 229) {
     input.focus();
     const sel = document.getSelection();
 

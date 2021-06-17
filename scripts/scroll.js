@@ -124,7 +124,7 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
     // Возвращает transition-duration
     scrollLineElement.style.transition = null;
     scrollContentElement.style.transition = null;
-  }
+  };
 
   document.addEventListener('mouseup', removeListeners);
   document.addEventListener('touchend', removeListeners);
@@ -149,7 +149,7 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
         scrollTransform(0, 0);
       }
     }
-  }
+  };
 
   const contentWheel = (e) => {
     const currentTransform = getTranslateY(scrollContentElement);
@@ -171,10 +171,10 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
         scrollTransform(0, 0);
       }
     }
-  }
+  };
 
-  scrollbarElement.addEventListener('touchstart', (e) => startTouchScrollY = e.touches[0].clientY)
-  scrollContentElement.addEventListener('touchstart', (e) => startTouchContentY = e.touches[0].clientY)
+  scrollbarElement.addEventListener('touchstart', (e) => startTouchScrollY = e.touches[0].clientY);
+  scrollContentElement.addEventListener('touchstart', (e) => startTouchContentY = e.touches[0].clientY);
 
   scrollbarElement.addEventListener('wheel', scrollbarWheel);
   scrollbarElement.addEventListener('touchmove', scrollbarWheel);
