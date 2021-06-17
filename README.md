@@ -1,6 +1,6 @@
 ![Emoji logo](https://github.com/SlDo/emoji/blob/main/logo.png?raw=true)
 
-Emoji Chat
+[Emoji Chat](https://sldo.github.io/emoji/)
 
 
 ## 🛸 Управление с клавиатуры
