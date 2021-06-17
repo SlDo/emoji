@@ -18,5 +18,7 @@ module.exports = {
     'class-methods-use-this': 'off',
     'no-param-reassign': 'off',
     'consistent-return': 'off',
+    'max-len': 'off',
+    'import/prefer-default-export': 'off',
   },
 };

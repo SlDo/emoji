@@ -1403,50 +1403,115 @@ const sections = [
   },
 ];
 
-const content = document.querySelector("[data-scroll='content']");
+const allEmojiContent = document.querySelector("[data-content='allEmoji']");
+const recentlyEmojiContent = document.querySelector("[data-content='recentlyEmoji']");
 const toggleButton = document.querySelector("[data-action='openEmoji']");
 const stickers = document.querySelector('.stickers');
-const recentlyEmojiTab = document.querySelector('[data-emoji-tab="recently"]');
+const inputElem = document.querySelector('#chatInput');
 
-toggleButton.addEventListener('click', () => {
+const toggleEmojiPicker = () => {
   stickers.classList.toggle('hidden');
-});
-
-const createEmojiSections = () => {
-  sections.forEach(({ items, title }) => {
-    const block = document.createElement('div');
-    block.classList.add('emoji__section');
-    const blockTitle = document.createElement('h2');
-    blockTitle.classList.add('title');
-    blockTitle.innerHTML = title;
-    const container = document.createElement('div');
-    container.classList.add('emoji__container');
-    block.appendChild(blockTitle);
-
-    items.forEach((emojiText) => {
-      // TODO: rewrite
-      const emoji = document.createElement('div');
-      emoji.classList.add('emoji-icon');
-      emoji.innerHTML = emojiText;
-      emoji.addEventListener('click', () => {
-        const current = localStorage.getItem('recently');
-        const recentlyEmoji = current == null ? [] : JSON.parse(current);
-
-        const parsed = recentlyEmoji.indexOf(emojiText) !== -1
-          ? recentlyEmoji
-          : [...recentlyEmoji, emojiText];
-
-        localStorage.setItem('recently', JSON.stringify(parsed));
-      });
-      container.appendChild(emoji);
-    });
-
-    block.appendChild(container);
-
-    content.appendChild(block);
-  });
 };
 
-createEmojiSections();
+toggleButton.addEventListener('click', toggleEmojiPicker);
 
-// TODO: Выведение emoji из localstorage
+inputElem.addEventListener('keydown', (e) => {
+  if (e.code === 'Tab') {
+    e.preventDefault();
+    toggleEmojiPicker();
+  }
+
+  if (e.code === 'ArrowUp') {
+    e.preventDefault();
+
+    if (!stickers.classList.contains('hidden')) {
+      allEmojiContent.querySelector('.emoji__section').querySelector('.emoji-icon').focus();
+    }
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (!stickers.contains(e.target) && !toggleButton.contains(e.target)) stickers.classList.add('hidden');
+});
+
+if (localStorage.getItem('recentlyEmoji') == null) {
+  localStorage.setItem('recentlyEmoji', JSON.stringify([{
+    title: 'Недавние',
+    items: [],
+  }]));
+}
+
+const createEmojiSection = (title) => {
+  const sectionElement = document.createElement('div');
+  sectionElement.classList.add('emoji__section');
+  const titleElement = document.createElement('h2');
+  titleElement.classList.add('emoji__section-title');
+  titleElement.innerHTML = title;
+  sectionElement.appendChild(titleElement);
+
+  return sectionElement;
+};
+
+const createEmoji = (emoji) => {
+  const emojiElement = document.createElement('div');
+  emojiElement.classList.add('emoji-icon');
+  emojiElement.setAttribute('tabindex', '1');
+  emojiElement.innerHTML = emoji;
+
+  emojiElement.addEventListener('click', clickEmojiHandle(emoji));
+
+  return emojiElement;
+};
+
+const createEmojiContainer = (emojiArray = []) => {
+  const containerElement = document.createElement('div');
+  containerElement.classList.add('emoji__container');
+
+  emojiArray.forEach((emoji) => {
+    containerElement.appendChild(createEmoji(emoji));
+  });
+
+  return containerElement;
+};
+
+const clickEmojiHandle = (emoji) => () => {
+  const recently = localStorage.getItem('recentlyEmoji');
+  const recentlyEmojiArray = recently != null && typeof recently === 'string' ? JSON.parse(recently)[0].items : [];
+
+  let parsed = [];
+
+  if (recentlyEmojiArray.indexOf(emoji) === -1) {
+    parsed = recentlyEmojiArray.length >= 25
+      ? [emoji, ...recentlyEmojiArray.slice(0, recentlyEmojiArray.length - 1)]
+      : [emoji, ...recentlyEmojiArray];
+
+    const emojiContent = recentlyEmojiContent.querySelector('.emoji__container');
+
+    if (recentlyEmojiArray.length >= 25) {
+      emojiContent.removeChild(emojiContent.querySelector('.emoji-icon'));
+    }
+
+    emojiContent.appendChild(createEmoji(emoji));
+  } else parsed = recentlyEmojiArray;
+
+  localStorage.setItem('recentlyEmoji', JSON.stringify([{
+    title: 'Недавние',
+    items: parsed,
+  }]));
+
+  inputElem.appendChild(document.createTextNode(emoji));
+};
+
+const fillEmoji = (json = [], contentElement) => {
+  if (json != null) {
+    json.forEach(({ items, title }) => {
+      const sectionElement = createEmojiSection(title);
+      sectionElement.appendChild(createEmojiContainer(items));
+
+      contentElement.appendChild(sectionElement);
+    });
+  }
+};
+
+fillEmoji(sections, allEmojiContent);
+fillEmoji(JSON.parse(localStorage.getItem('recentlyEmoji')), recentlyEmojiContent);

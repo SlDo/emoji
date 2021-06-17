@@ -1,23 +1,25 @@
 const tabs = document.querySelectorAll("[data-emoji-section='tab']");
+const tabsContent = document.querySelector('.tabs__content');
 const allEmojiButton = document.querySelector('[data-tab="all"]');
 const recentlyEmojiButton = document.querySelector('[data-tab="recently"]');
 
 const hasProperty = (object, property) => Object.prototype.hasOwnProperty.bind(object, property);
 
 const createTabs = (settings) => {
+  let activeTab = null;
+
   const setTab = (tab) => {
+    activeTab = tab;
+    tabsContent.style.transform = `translateX(-${settings[tab].tabContent.offsetLeft}px)`;
+
     Object.keys(settings).forEach((key) => {
       const tabSetting = settings[key];
       const hasActiveButtonClass = hasProperty(tabSetting, 'activeButtonClass');
 
-      if (hasProperty(tabSetting, 'tabContent')) {
+      if (hasActiveButtonClass) {
         if (tab === key) {
-          if (hasActiveButtonClass) tabSetting.button.classList.add('active');
-          tabSetting.tabContent.classList.remove('inactive-tab');
-        } else {
-          if (hasActiveButtonClass) tabSetting.button.classList.remove('active');
-          tabSetting.tabContent.classList.add('inactive-tab');
-        }
+          tabSetting.button.classList.add('active');
+        } else tabSetting.button.classList.remove('active');
       }
     });
   };
@@ -25,9 +27,11 @@ const createTabs = (settings) => {
   Object.keys(settings).forEach((key) => {
     const tabSetting = settings[key];
 
-    if (hasProperty(tabSetting, 'tabContent')) {
-      tabSetting.tabContent.classList.add('inactive-tab');
-    }
+    document.addEventListener('keyup', (e) => {
+      if (e.code === 'Tab') {
+        if (tabSetting.tabContent.contains(document.activeElement) && key !== activeTab) setTab(key);
+      }
+    });
 
     if (hasProperty(tabSetting, 'button')) {
       tabSetting.button.addEventListener('click', () => setTab(key));

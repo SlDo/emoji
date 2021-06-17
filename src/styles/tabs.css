@@ -1,3 +1,11 @@
-.inactive-tab {
-  display: none;
+.tabs {
+  overflow: hidden;
+  max-width: 100%;
+}
+
+/* TODO: Сделать составление автоматической сетки */
+.tabs__content {
+  display: grid;
+  grid-template-columns: 100% 100%;
+  transition: var(--duration);
 }

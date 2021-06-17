@@ -75,6 +75,11 @@ main {
   content: attr(data-placeholder);
 }
 
+.highlight {
+  color: #308EE0;
+  text-decoration: none;
+}
+
 .input__icon-button {
   cursor: pointer;
   border: none;
@@ -93,4 +98,8 @@ main {
 
 .input__icon-button:hover .input--icon {
   fill: var(--blue-color);
+}
+
+.recently-emoji .stickers__container {
+
 }

@@ -36,7 +36,7 @@
   padding: 4px 8px;
 }
 
-.emoji__section .title {
+.emoji__section-title {
   font-size: 0.8125rem;
   color: var(--grey-100-color);
   margin-bottom: 5px;
@@ -78,6 +78,7 @@
   padding: 4px;
   cursor: pointer;
   box-sizing: border-box;
+  outline: none;
 }
 
 .emoji-icon:before {
@@ -86,15 +87,15 @@
   padding-top: 100%;
 }
 
-.emoji-icon:hover {
-  background: var(--light-gray-100-color);
+.emoji-icon:hover, .emoji-icon:focus {
+  background-color: var(--light-gray-100-color);
 }
 
 .emoji-panel {
   width: 100%;
   min-height: 36px;
   vertical-align: middle;
-  background: var(--light-gray-color);
+  background-color: var(--light-gray-color);
   border-bottom-left-radius: var(--radius);
   border-bottom-right-radius: var(--radius);
 }
@@ -105,6 +106,7 @@
   width: 36px;
   height: 36px;
   padding: 0;
+  outline: none;
 }
 
 .emoji-panel__button.active {
@@ -117,6 +119,6 @@
   vertical-align: middle;
 }
 
-.emoji-panel__button:hover svg, .emoji-panel__button.active svg {
+.emoji-panel__button:hover, .emoji-panel__button:focus svg, .emoji-panel__button.active svg {
   fill: var(--blue-color);
 }

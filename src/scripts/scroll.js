@@ -3,11 +3,10 @@ const scrollLine = scrollbar.querySelector('.scrollbar__line');
 const scrollContent = document.querySelector("[data-scroll='content']");
 
 const getElementHeight = (elem) => ('getComputedStyle' in window
-  ? parseInt(
+  ? parseFloat(
     window.getComputedStyle(elem, null).getPropertyValue('height'),
-    10,
   )
-  : parseInt(elem.currentStyle.height, 10));
+  : parseFloat(elem.currentStyle.height));
 
 const getTranslateY = (element) => {
   if (!('getComputedStyle' in window)) return;
@@ -26,25 +25,69 @@ const getTranslateY = (element) => {
 };
 
 const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentElement) => {
-  const scrollbarHeight = getElementHeight(scrollbarElement);
-  const scrollContentHeight = getElementHeight(scrollContentElement);
+  let scrollbarHeight = getElementHeight(scrollbarElement);
+  let scrollContentHeight = getElementHeight(scrollContentElement);
 
   // Высота с областью прокрутки
-  const contentScrollHeight = scrollContentElement.scrollHeight;
+  let contentScrollHeight = scrollContentElement.scrollHeight;
 
-  const ratio = scrollContentHeight / contentScrollHeight;
-  const scrollLineHeight = scrollbarHeight * ratio;
+  scrollbarElement.style.display = null;
+
+  let ratio = scrollContentHeight / contentScrollHeight;
+  let scrollLineHeight = scrollbarHeight * ratio;
 
   let startTransform = 0;
   let startY = 0;
-  const limitY = scrollbarHeight - scrollLineHeight;
+  let limitY = scrollbarHeight - scrollLineHeight;
 
   scrollLineElement.style.height = `${scrollLineHeight}px`;
+
+  const setScrollbarVisibility = () => {
+    if (contentScrollHeight > Math.ceil(scrollContentHeight)) {
+      scrollbarElement.style.display = null;
+    } else {
+      scrollbarElement.style.display = 'none';
+    }
+  };
+
+  const mutationObserver = new MutationObserver(() => {
+    scrollbarHeight = getElementHeight(scrollbarElement);
+    scrollContentHeight = getElementHeight(scrollContentElement);
+
+    // Высота с областью прокрутки
+    contentScrollHeight = scrollContentElement.scrollHeight;
+
+    scrollbarElement.style.display = null;
+
+    ratio = scrollContentHeight / contentScrollHeight;
+    scrollLineHeight = scrollbarHeight * ratio;
+
+    startTransform = 0;
+    startY = 0;
+    limitY = scrollbarHeight - scrollLineHeight;
+
+    scrollLineElement.style.height = `${scrollLineHeight}px`;
+
+    setScrollbarVisibility();
+  });
+
+  mutationObserver.observe(scrollContentElement, {
+    childList: true,
+    subtree: true,
+  });
+
+  setScrollbarVisibility();
 
   const scrollTransform = (scrollLineTransform, scrollContentTransform) => {
     scrollLineElement.style.transform = `translateY(${scrollLineTransform}px)`;
     scrollContentElement.style.transform = `translateY(${scrollContentTransform}px)`;
   };
+
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Tab' && scrollContentElement.contains(document.activeElement) && document.activeElement.offsetTop < contentScrollHeight - scrollContentHeight) {
+      scrollTransform(document.activeElement.offsetTop * ratio, -document.activeElement.offsetTop);
+    }
+  });
 
   const mouseMoveHandle = (e) => {
     const transform = startTransform + e.clientY - startY;
@@ -72,7 +115,7 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
     scrollLineElement.style.transition = null;
     scrollContentElement.style.transition = null;
   });
-  // TODO: Сделать прокрутку медленнее
+
   scrollbarElement.addEventListener('wheel', (e) => {
     const currentTransform = getTranslateY(scrollLineElement);
 
@@ -119,3 +162,4 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
 };
 
 addCustomScroll(scrollbar, scrollLine, scrollContent);
+addCustomScroll(document.querySelectorAll("[data-scroll='container']")[1], document.querySelectorAll("[data-scroll='container']")[1].querySelector('.scrollbar__line'), document.querySelectorAll("[data-scroll='content']")[1]);
