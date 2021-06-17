@@ -40,6 +40,9 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
   let startY = 0;
   let limitY = scrollbarHeight - scrollLineHeight;
 
+  let startTouchScrollY = 0;
+  let startTouchContentY = 0;
+
   scrollLineElement.style.height = `${scrollLineHeight}px`;
 
   const setScrollbarVisibility = () => {
@@ -66,6 +69,9 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
     startY = 0;
     limitY = scrollbarHeight - scrollLineHeight;
 
+    startTouchScrollY = 0;
+    startTouchContentY = 0;
+
     scrollLineElement.style.height = `${scrollLineHeight}px`;
 
     setScrollbarVisibility();
@@ -90,7 +96,7 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
   });
 
   const mouseMoveHandle = (e) => {
-    const transform = startTransform + e.clientY - startY;
+    const transform = startTransform + (e.clientY || e.touches[0].clientY) - startY;
 
     if (transform >= 0 && transform <= limitY) scrollTransform(transform, -transform / ratio);
   };
@@ -102,24 +108,31 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
     scrollLineElement.style.transition = '0s';
     scrollContentElement.style.transition = '0s';
 
-    startY = e.clientY;
+    startY = e.clientY || e.touches[0].clientY;
 
     document.addEventListener('mousemove', mouseMoveHandle);
+    document.addEventListener('touchmove', mouseMoveHandle);
   };
 
   scrollLineElement.addEventListener('mousedown', mouseDownHandle);
-  document.addEventListener('mouseup', () => {
+  scrollLineElement.addEventListener('touchstart', mouseDownHandle);
+
+  const removeListeners = () => {
     document.removeEventListener('mousemove', mouseMoveHandle);
+    document.removeEventListener('touchmove', mouseMoveHandle);
 
     // Возвращает transition-duration
     scrollLineElement.style.transition = null;
     scrollContentElement.style.transition = null;
-  });
+  }
 
-  scrollbarElement.addEventListener('wheel', (e) => {
+  document.addEventListener('mouseup', removeListeners);
+  document.addEventListener('touchend', removeListeners);
+
+  const scrollbarWheel = (e) => {
     const currentTransform = getTranslateY(scrollLineElement);
 
-    if (e.deltaY > 0) {
+    if ((e.deltaY && e.deltaY > 0) || e.touches[0].clientY < startTouchContentY) {
       const delta = currentTransform + scrollLineElement.scrollHeight / 20 / ratio;
 
       if (delta < limitY) {
@@ -127,7 +140,7 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
       } else {
         scrollTransform(limitY, (scrollContentElement.clientHeight - contentScrollHeight));
       }
-    } else if (e.deltaY < 0) {
+    } else if ((e.deltaY && e.deltaY < 0) || e.touches[0].clientY > startTouchContentY) {
       const delta = currentTransform - scrollLineElement.clientHeight / 20 / ratio;
 
       if (delta > 0) {
@@ -136,12 +149,12 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
         scrollTransform(0, 0);
       }
     }
-  });
+  }
 
-  scrollContentElement.addEventListener('wheel', (e) => {
+  const contentWheel = (e) => {
     const currentTransform = getTranslateY(scrollContentElement);
 
-    if (e.deltaY > 0) {
+    if ((e.deltaY && e.deltaY > 0) || e.touches[0].clientY < startTouchContentY) {
       const delta = currentTransform - (contentScrollHeight / 20);
 
       if (-delta * ratio <= limitY) {
@@ -149,7 +162,7 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
       } else {
         scrollTransform(limitY, scrollContentElement.clientHeight - contentScrollHeight);
       }
-    } else if (e.deltaY < 0) {
+    } else if ((e.deltaY && e.deltaY < 0) || e.touches[0].clientY > startTouchContentY) {
       const delta = currentTransform + (contentScrollHeight / 20);
 
       if (-delta * ratio >= 0) {
@@ -158,7 +171,15 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
         scrollTransform(0, 0);
       }
     }
-  });
+  }
+
+  scrollbarElement.addEventListener('touchstart', (e) => startTouchScrollY = e.touches[0].clientY)
+  scrollContentElement.addEventListener('touchstart', (e) => startTouchContentY = e.touches[0].clientY)
+
+  scrollbarElement.addEventListener('wheel', scrollbarWheel);
+  scrollbarElement.addEventListener('touchmove', scrollbarWheel);
+  scrollContentElement.addEventListener('wheel', contentWheel);
+  scrollContentElement.addEventListener('touchmove', contentWheel);
 };
 
 addCustomScroll(scrollbar, scrollLine, scrollContent);
