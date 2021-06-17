@@ -96,12 +96,16 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
   });
 
   const mouseMoveHandle = (e) => {
+    e.preventDefault();
+
     const transform = startTransform + (e.clientY || e.touches[0].clientY) - startY;
 
     if (transform >= 0 && transform <= limitY) scrollTransform(transform, -transform / ratio);
   };
 
   const mouseDownHandle = (e) => {
+    e.preventDefault();
+
     startTransform = getTranslateY(scrollLineElement);
 
     // Сбросить transition-duration на время скроллинга;
@@ -130,6 +134,7 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
   document.addEventListener('touchend', removeListeners);
 
   const scrollbarWheel = (e) => {
+    e.preventDefault();
     const currentTransform = getTranslateY(scrollLineElement);
 
     if ((e.deltaY != null && e.deltaY > 0) || e.touches[0].clientY < startTouchContentY) {
@@ -152,10 +157,12 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
   };
 
   const contentWheel = (e) => {
+    e.preventDefault();
+
     const currentTransform = getTranslateY(scrollContentElement);
-    console.log((e.deltaY != null && e.deltaY > 0));
+
     if (e.deltaY != null ? e.deltaY > 0 : e.touches[0].clientY < startTouchContentY) {
-      const delta = currentTransform - (contentScrollHeight / 15);
+      const delta = currentTransform - (contentScrollHeight / 10);
 
       if (-delta * ratio <= limitY) {
         scrollTransform(-delta * ratio, delta);
@@ -163,7 +170,7 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
         scrollTransform(limitY, scrollContentElement.clientHeight - contentScrollHeight);
       }
     } else if (e.deltaY != null ? e.deltaY < 0 : e.touches[0].clientY > startTouchContentY) {
-      const delta = currentTransform + (contentScrollHeight / 15);
+      const delta = currentTransform + (contentScrollHeight / 10);
 
       if (-delta * ratio >= 0) {
         scrollTransform(-delta * ratio, delta);
