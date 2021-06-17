@@ -3,6 +3,7 @@
 html {
   font-family: Arial, sans-serif;
   background: var(--blue-color);
+  height: 100vh;
 }
 
 .hidden {
