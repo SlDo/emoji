@@ -132,7 +132,7 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
   const scrollbarWheel = (e) => {
     const currentTransform = getTranslateY(scrollLineElement);
 
-    if ((e.deltaY && e.deltaY > 0) || e.touches[0].clientY < startTouchContentY) {
+    if ((e.deltaY != null && e.deltaY > 0) || e.touches[0].clientY < startTouchContentY) {
       const delta = currentTransform + scrollLineElement.scrollHeight / 20 / ratio;
 
       if (delta < limitY) {
@@ -140,7 +140,7 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
       } else {
         scrollTransform(limitY, (scrollContentElement.clientHeight - contentScrollHeight));
       }
-    } else if ((e.deltaY && e.deltaY < 0) || e.touches[0].clientY > startTouchContentY) {
+    } else if ((e.deltaY != null && e.deltaY < 0) || e.touches[0].clientY > startTouchContentY) {
       const delta = currentTransform - scrollLineElement.clientHeight / 20 / ratio;
 
       if (delta > 0) {
@@ -153,17 +153,17 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
 
   const contentWheel = (e) => {
     const currentTransform = getTranslateY(scrollContentElement);
-
-    if ((e.deltaY && e.deltaY > 0) || e.touches[0].clientY < startTouchContentY) {
-      const delta = currentTransform - (contentScrollHeight / 20 * ratio * 4);
+    console.log((e.deltaY != null && e.deltaY > 0));
+    if (e.deltaY != null ? e.deltaY > 0 : e.touches[0].clientY < startTouchContentY) {
+      const delta = currentTransform - (contentScrollHeight / 15);
 
       if (-delta * ratio <= limitY) {
         scrollTransform(-delta * ratio, delta);
       } else {
         scrollTransform(limitY, scrollContentElement.clientHeight - contentScrollHeight);
       }
-    } else if ((e.deltaY && e.deltaY < 0) || e.touches[0].clientY > startTouchContentY) {
-      const delta = currentTransform + (contentScrollHeight / 20 * ratio * 4);
+    } else if (e.deltaY != null ? e.deltaY < 0 : e.touches[0].clientY > startTouchContentY) {
+      const delta = currentTransform + (contentScrollHeight / 15);
 
       if (-delta * ratio >= 0) {
         scrollTransform(-delta * ratio, delta);

@@ -5,8 +5,9 @@ html {
   background: var(--blue-color);
 }
 
-body {
-  height: 100vh;
+html, body {
+  width: 100%;
+  height: 100%;
 }
 
 .hidden {
@@ -28,6 +29,13 @@ body {
 main {
   padding: 50px;
   box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
 }
 
 .chat__container {
@@ -48,8 +56,6 @@ main {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  width: 100vw;
-  height: 100%;
 }
 
 .input__wrapper {
