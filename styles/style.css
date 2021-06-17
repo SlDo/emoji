@@ -25,10 +25,14 @@ body {
   cursor: pointer;
 }
 
+main {
+  padding: 50px;
+  box-sizing: border-box;
+}
+
 .chat__container {
   position: relative;
   width: 290px;
-  margin-bottom: 50px;
 }
 
 .shape {
