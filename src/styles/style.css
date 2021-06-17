@@ -2,6 +2,7 @@
 
 html {
   font-family: Arial, sans-serif;
+  background: var(--blue-color);
 }
 
 .hidden {
@@ -23,6 +24,7 @@ html {
 .chat__container {
   position: relative;
   width: 290px;
+  margin-bottom: 50px;
 }
 
 .shape {
@@ -36,7 +38,7 @@ html {
 
 main {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   width: 100vw;
   height: 100vh;
@@ -53,6 +55,7 @@ main {
   max-height: 200px;
   font-size: 0.8125rem;
   line-height: 18px;
+  background: #FFFFFF;
   color: var(--grey-100-color);
   box-sizing: border-box;
   overflow-y: auto;
@@ -61,10 +64,6 @@ main {
   padding: 9px calc(13px + 20px + 13px) 9px 13px;
   transition: border-color var(--duration);
   cursor: text;
-}
-
-.input:focus {
-  border-color: var(--blue-color);
 }
 
 .input:empty:before {

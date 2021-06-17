@@ -16,6 +16,7 @@
   position: absolute;
   width: 100%;
   bottom: calc(100% + 12px);
+  background: #FFFFFF;
 }
 
 .stickers:after {
@@ -44,7 +45,7 @@
 
 .emoji-picker__content {
   flex: 1;
-  transition: transform 0.15s cubic-bezier(0.61, 1, 0.88, 1);
+  transition: transform 0.25s cubic-bezier(0.61, 1, 0.88, 1);
 }
 
 .emoji__container {
@@ -95,6 +96,7 @@
   width: 100%;
   min-height: 36px;
   vertical-align: middle;
+  overflow: hidden;
   background-color: var(--light-gray-color);
   border-bottom-left-radius: var(--radius);
   border-bottom-right-radius: var(--radius);
