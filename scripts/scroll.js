@@ -155,7 +155,7 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
     const currentTransform = getTranslateY(scrollContentElement);
 
     if ((e.deltaY && e.deltaY > 0) || e.touches[0].clientY < startTouchContentY) {
-      const delta = currentTransform - (contentScrollHeight / 20);
+      const delta = currentTransform - (contentScrollHeight / 20 * ratio * 4);
 
       if (-delta * ratio <= limitY) {
         scrollTransform(-delta * ratio, delta);
@@ -163,7 +163,7 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
         scrollTransform(limitY, scrollContentElement.clientHeight - contentScrollHeight);
       }
     } else if ((e.deltaY && e.deltaY < 0) || e.touches[0].clientY > startTouchContentY) {
-      const delta = currentTransform + (contentScrollHeight / 20);
+      const delta = currentTransform + (contentScrollHeight / 20 * ratio * 4);
 
       if (-delta * ratio >= 0) {
         scrollTransform(-delta * ratio, delta);

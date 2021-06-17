@@ -3,6 +3,9 @@
 html {
   font-family: Arial, sans-serif;
   background: var(--blue-color);
+}
+
+body {
   height: 100vh;
 }
 
