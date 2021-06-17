@@ -115,15 +115,15 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
     startY = e.clientY || e.touches[0].clientY;
 
     document.addEventListener('mousemove', mouseMoveHandle);
-    document.addEventListener('touchmove', mouseMoveHandle);
+    document.addEventListener('touchmove', mouseMoveHandle, { passive: true });
   };
 
   scrollLineElement.addEventListener('mousedown', mouseDownHandle);
-  scrollLineElement.addEventListener('touchstart', mouseDownHandle);
+  scrollLineElement.addEventListener('touchstart', mouseDownHandle, { passive: true });
 
   const removeListeners = () => {
     document.removeEventListener('mousemove', mouseMoveHandle);
-    document.removeEventListener('touchmove', mouseMoveHandle);
+    document.removeEventListener('touchmove', mouseMoveHandle, { passive: true });
 
     // Возвращает transition-duration
     scrollLineElement.style.transition = null;
@@ -131,7 +131,7 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
   };
 
   document.addEventListener('mouseup', removeListeners);
-  document.addEventListener('touchend', removeListeners);
+  document.addEventListener('touchend', removeListeners, { passive: true });
 
   const scrollbarWheel = (e) => {
     e.preventDefault();
@@ -180,13 +180,13 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
     }
   };
 
-  scrollbarElement.addEventListener('touchstart', (e) => startTouchScrollY = e.touches[0].clientY);
-  scrollContentElement.addEventListener('touchstart', (e) => startTouchContentY = e.touches[0].clientY);
+  scrollbarElement.addEventListener('touchstart', (e) => startTouchScrollY = e.touches[0].clientY, { passive: true });
+  scrollContentElement.addEventListener('touchstart', (e) => startTouchContentY = e.touches[0].clientY, { passive: true });
 
-  scrollbarElement.addEventListener('wheel', scrollbarWheel);
-  scrollbarElement.addEventListener('touchmove', scrollbarWheel);
-  scrollContentElement.addEventListener('wheel', contentWheel);
-  scrollContentElement.addEventListener('touchmove', contentWheel);
+  scrollbarElement.addEventListener('wheel', scrollbarWheel, { passive: true });
+  scrollbarElement.addEventListener('touchmove', scrollbarWheel, { passive: true });
+  scrollContentElement.addEventListener('wheel', contentWheel, { passive: true });
+  scrollContentElement.addEventListener('touchmove', contentWheel, { passive: true });
 };
 
 addCustomScroll(scrollbar, scrollLine, scrollContent);
