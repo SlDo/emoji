@@ -24,6 +24,7 @@ html, body {
 .button-icon {
   border: none;
   cursor: pointer;
+  background: none;
 }
 
 main {
@@ -111,8 +112,4 @@ main {
 
 .input__icon-button:hover .input--icon {
   fill: var(--blue-color);
-}
-
-.recently-emoji .stickers__container {
-
 }
