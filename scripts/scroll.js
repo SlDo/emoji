@@ -25,22 +25,20 @@ const getTranslateY = (element) => {
 };
 
 const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentElement) => {
-  let scrollbarHeight = getElementHeight(scrollbarElement);
-  let scrollContentHeight = getElementHeight(scrollContentElement);
+  let scrollbarHeight = 0;
+  let scrollContentHeight = 0;
 
   // Высота с областью прокрутки
-  let contentScrollHeight = scrollContentElement.scrollHeight;
+  let contentScrollHeight = 0;
 
   scrollbarElement.style.display = null;
 
-  let ratio = scrollContentHeight / contentScrollHeight;
-  let scrollLineHeight = scrollbarHeight * ratio;
-
   let startTransform = 0;
   let startY = 0;
-  let limitY = scrollbarHeight - scrollLineHeight;
+  let limitY = 0;
+  let scrollLineHeight = 0;
+  let ratio = 0;
 
-  let startTouchScrollY = 0;
   let startTouchContentY = 0;
 
   scrollLineElement.style.height = `${scrollLineHeight}px`;
@@ -53,7 +51,7 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
     }
   };
 
-  const mutationObserver = new MutationObserver(() => {
+  const setInitialState = () => {
     scrollbarHeight = getElementHeight(scrollbarElement);
     scrollContentHeight = getElementHeight(scrollContentElement);
 
@@ -69,11 +67,15 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
     startY = 0;
     limitY = scrollbarHeight - scrollLineHeight;
 
-    startTouchScrollY = 0;
     startTouchContentY = 0;
 
     scrollLineElement.style.height = `${scrollLineHeight}px`;
+  };
 
+  setInitialState();
+
+  const mutationObserver = new MutationObserver(() => {
+    setInitialState();
     setScrollbarVisibility();
   });
 
@@ -96,16 +98,12 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
   });
 
   const mouseMoveHandle = (e) => {
-    e.preventDefault();
-
     const transform = startTransform + (e.clientY || e.touches[0].clientY) - startY;
 
     if (transform >= 0 && transform <= limitY) scrollTransform(transform, -transform / ratio);
   };
 
   const mouseDownHandle = (e) => {
-    e.preventDefault();
-
     startTransform = getTranslateY(scrollLineElement);
 
     // Сбросить transition-duration на время скроллинга;
@@ -123,7 +121,7 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
 
   const removeListeners = () => {
     document.removeEventListener('mousemove', mouseMoveHandle);
-    document.removeEventListener('touchmove', mouseMoveHandle, { passive: true });
+    document.removeEventListener('touchmove', mouseMoveHandle);
 
     // Возвращает transition-duration
     scrollLineElement.style.transition = null;
@@ -134,7 +132,6 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
   document.addEventListener('touchend', removeListeners, { passive: true });
 
   const scrollbarWheel = (e) => {
-    e.preventDefault();
     const currentTransform = getTranslateY(scrollLineElement);
 
     if (e.deltaY != null ? e.deltaY > 0 : e.touches[0].clientY < startTouchContentY) {
@@ -157,8 +154,6 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
   };
 
   const contentWheel = (e) => {
-    e.preventDefault();
-
     const currentTransform = getTranslateY(scrollContentElement);
 
     if (e.deltaY != null ? e.deltaY > 0 : e.touches[0].clientY < startTouchContentY) {
@@ -180,8 +175,10 @@ const addCustomScroll = (scrollbarElement, scrollLineElement, scrollContentEleme
     }
   };
 
-  scrollbarElement.addEventListener('touchstart', (e) => startTouchScrollY = e.touches[0].clientY, { passive: true });
-  scrollContentElement.addEventListener('touchstart', (e) => startTouchContentY = e.touches[0].clientY, { passive: true });
+  scrollContentElement.addEventListener('touchstart', (e) => {
+    startTouchContentY = e.touches[0].clientY;
+    return null;
+  }, { passive: true });
 
   scrollbarElement.addEventListener('wheel', scrollbarWheel, { passive: true });
   scrollbarElement.addEventListener('touchmove', scrollbarWheel, { passive: true });
